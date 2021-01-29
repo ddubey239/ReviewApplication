@@ -7,5 +7,6 @@ class CreatePosts < ActiveRecord::Migration[6.1]
 
       t.timestamps
     end
+    add_index :posts, [:reviewable_id, :user], unique: true
   end
 end

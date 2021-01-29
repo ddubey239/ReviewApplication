@@ -3,15 +3,41 @@ class PostsController < ApplicationController
 
   # GET /posts or /posts.json
   def index
-    if (params[:user_id])
-      user = User.find(params[:user_id])
-      # movie = Movie.find(params[:movie_id])
-      render json:user.posts, include: [:user, :comments]
+      render json:Post.all,include: [:comments,:user]
+  end
+
+  def movie_user_post_index
+    if (params[:id] && params[:movie_id])
+      @user = User.find(params[:id])
+      movie = Movie.find(params[:movie_id])
+      post = Post.where(reviewable:movie, user:@user).first
+      render json:post, include: [:user, :comments]
     else
-      render json:Post.all,include: [:comments,:user,:reviewable]
+      raise Exception.new "Movie post doesn't exist for this user"
     end
   end
 
+  def user_post_index
+    if(params[:id])
+      @user = User.find(params[:id])
+      post = Post.where(user:@user)
+      render json: post.as_json
+    else 
+      raise Exception.new "Post doesn't exist for this user"
+    end
+  end
+
+  def book_user_post_index
+    if (params[:id] && params[:book_id])
+      @user = User.find(params[:id])
+      book = Book.find(params[:book_id])
+      post = Post.where(reviewable:book, user:@user).first
+      render json:post, include: [:user, :comments]
+    else
+      # render json:Post.all,include: [:comments,:user]
+      raise Exception.new "Book post doesn't exist for this user"
+    end
+  end
   # GET /posts/1 or /posts/1.json
   def show
   end

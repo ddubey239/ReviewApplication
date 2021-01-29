@@ -3,8 +3,25 @@ class CommentsController < ApplicationController
 
   # GET /comments or /comments.json
   def index
+    if(params[:post_id])
     post = Post.find(params[:post_id])
     render json:post.comments.as_json
+    else 
+      comments = Comment.all
+      render json: comments
+    end
+  end
+
+  def book_user_post_comment_index
+    if (params[:id] && params[:book_id] && params[:user_id])
+      @user = User.find(params[:user_id])
+      @book = Book.find(params[:book_id])
+      @post = Post.where(reviewable:@book, user:@user).first
+      comment = Comment.where(post:@post)
+      render json: comment
+    else
+      raise Exception.new "Comments for this Book post doesn't exist for this user"
+    end
   end
 
   # GET /comments/1 or /comments/1.json
