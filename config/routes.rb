@@ -5,7 +5,9 @@ Rails.application.routes.draw do
         get '/posts', to: 'posts#movie_user_post_index'
       end
       resources :posts, only: [:index, :show] do
-        resources :comments, only: [:index, :show]
+        member do
+          get '/comments', to: 'comments#movie_user_post_comment_index'
+        end
       end
     end
   end
@@ -25,7 +27,7 @@ Rails.application.routes.draw do
       end
     end
   end
-  
+
   resources :users do
     member do
       get '/posts', to: 'posts#user_post_index'

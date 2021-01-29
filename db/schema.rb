@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_27_150928) do
+ActiveRecord::Schema.define(version: 2021_01_29_070759) do
 
   create_table "books", force: :cascade do |t|
     t.string "title"
@@ -42,6 +42,7 @@ ActiveRecord::Schema.define(version: 2021_01_27_150928) do
     t.integer "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index "\"reviewable_id\", \"user\", \"reviewable_type\"", name: "index_posts_on_reviewable_id_and_user_and_reviewable_type", unique: true
     t.index ["user_id"], name: "index_posts_on_user_id"
   end
 

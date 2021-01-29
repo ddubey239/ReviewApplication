@@ -12,11 +12,23 @@ class CommentsController < ApplicationController
     end
   end
 
+  def movie_user_post_comment_index
+    if (params[:id] && params[:movie_id] && params[:user_id])
+      @user = User.find(params[:user_id])
+      @movie = Movie.find(params[:movie_id])
+      @post = Post.where(reviewable:@movie, user:@user)
+      comment = Comment.where(post:@post)
+      render json: comment
+    else
+      raise Exception.new "Comments for this movie post doesn't exist for this user"
+    end
+  end
+
   def book_user_post_comment_index
     if (params[:id] && params[:book_id] && params[:user_id])
       @user = User.find(params[:user_id])
       @book = Book.find(params[:book_id])
-      @post = Post.where(reviewable:@book, user:@user).first
+      @post = Post.where(reviewable:@book, user:@user)
       comment = Comment.where(post:@post)
       render json: comment
     else
